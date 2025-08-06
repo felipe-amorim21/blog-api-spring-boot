@@ -26,13 +26,9 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findPostById(@PathVariable Long id) {
-        try {
-             Post post = postService.findById(id);
-             return ResponseEntity.ok(post);
-        }
-        catch (ResourceNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        Post post = postService.findById(id);
+        return ResponseEntity.ok(post);
+
     }
 
     @GetMapping
