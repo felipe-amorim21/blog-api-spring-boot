@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/posts")
 public class PostController {
 
     private final PostService postService;
@@ -16,22 +17,22 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping("/post")
+    @PostMapping
     public ResponseEntity<Post> save(@RequestBody Post post) {
         return ResponseEntity.ok(postService.save(post));
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Post> findPostById(@PathVariable Long id) {
         return ResponseEntity.ok(postService.findById(id));
     }
 
-    @GetMapping("/post")
+    @GetMapping
     public ResponseEntity<List<Post>> findAll() {
         return ResponseEntity.ok(postService.findAll());
     }
 
-    @DeleteMapping("/post/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable Long id) {
         postService.deleteById(id);
         return ResponseEntity.ok().build();
