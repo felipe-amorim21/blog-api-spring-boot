@@ -16,6 +16,8 @@ public class Comment {
 
     private LocalDateTime createdAt;
 
+    private LocalDateTime updatedAt;
+
     @ManyToOne
     @JoinColumn(name = "post_id")
     @JsonIgnore
@@ -23,10 +25,20 @@ public class Comment {
 
     public Comment() {}
 
-    public Comment(String content, LocalDateTime createdAt, Post post) {
+    public Comment(String content, Post post) {
         this.content = content;
-        this.createdAt = createdAt;
         this.post = post;
+    }
+
+    @PrePersist
+    public void onCreate(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -55,5 +67,13 @@ public class Comment {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updateAt) {
+        this.updatedAt = updateAt;
     }
 }

@@ -1,8 +1,11 @@
 package br.com.felipe.blog.entity;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -22,16 +25,24 @@ public class Post {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Post(){}
 
-    public Post(String title, String content, List<Comment> comments, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public Post(String title, String content) {
         this.title = title;
         this.content = content;
-        this.comments = comments;
-        this.updatedAt = updatedAt;
-        this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void onCreate(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate(){
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
