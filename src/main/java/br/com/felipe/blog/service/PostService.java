@@ -1,7 +1,10 @@
 package br.com.felipe.blog.service;
 
+import br.com.felipe.blog.dto.PostRequestDTO;
+import br.com.felipe.blog.dto.PostResponseDTO;
 import br.com.felipe.blog.entity.Post;
 import br.com.felipe.blog.exceptions.ResourceNotFoundException;
+import br.com.felipe.blog.mapper.PostMapper;
 import br.com.felipe.blog.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +15,29 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public PostService(PostRepository postRepository) {
+    private final PostMapper postMapper;
+
+    public PostService(PostRepository postRepository, PostMapper postMapper) {
         this.postRepository = postRepository;
+        this.postMapper = postMapper;
     }
 
-    public Post save (Post post){
-        return postRepository.save(post);
+    public PostResponseDTO save (PostRequestDTO postDTO){
+        Post post = postMapper.toEntity(postDTO);
+        Post savedPost = postRepository.save(post);
+        return postMapper.toResponseDTO(savedPost);
     }
 
-    public Post findById(Long id){
-        return postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
+    public PostResponseDTO findById(Long id){
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
+        return postMapper.toResponseDTO(post);
     }
 
-    public List<Post> findAll(){
-        return postRepository.findAll();
+    public List<PostResponseDTO> findAll(){
+        List<Post> post =  postRepository.findAll();
+        return post.stream()
+                .map(postMapper::toResponseDTO)
+                .toList();
     }
 
     public void deleteById(Long id){

@@ -1,5 +1,7 @@
 package br.com.felipe.blog.controller;
 
+import br.com.felipe.blog.dto.PostRequestDTO;
+import br.com.felipe.blog.dto.PostResponseDTO;
 import br.com.felipe.blog.entity.Post;
 import br.com.felipe.blog.exceptions.ResourceNotFoundException;
 import br.com.felipe.blog.service.PostService;
@@ -20,19 +22,20 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> save(@RequestBody Post post) {
-        return ResponseEntity.ok(postService.save(post));
+    public ResponseEntity<PostResponseDTO> save(@RequestBody PostRequestDTO postRequestDTO) {
+        PostResponseDTO createdPost = postService.save(postRequestDTO);
+
+        return ResponseEntity.ok(createdPost);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findPostById(@PathVariable Long id) {
-        Post post = postService.findById(id);
+        PostResponseDTO post = postService.findById(id);
         return ResponseEntity.ok(post);
-
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> findAll() {
+    public ResponseEntity<List<PostResponseDTO>> findAll() {
         return ResponseEntity.ok(postService.findAll());
     }
 
