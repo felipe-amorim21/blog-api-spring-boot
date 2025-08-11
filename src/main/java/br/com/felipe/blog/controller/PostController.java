@@ -2,6 +2,7 @@ package br.com.felipe.blog.controller;
 
 import br.com.felipe.blog.dto.PostRequestDTO;
 import br.com.felipe.blog.dto.PostResponseDTO;
+import br.com.felipe.blog.entity.Post;
 import br.com.felipe.blog.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,15 @@ public class PostController {
         return ResponseEntity.created(postUri).body(createdPost);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PostResponseDTO> update(@PathVariable Long id, @RequestBody PostRequestDTO postRequestDTO){
+        PostResponseDTO updatedPost = postService.update(id, postRequestDTO);
+        return ResponseEntity.ok(updatedPost);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDTO> findPostById(@PathVariable Long id) {
         PostResponseDTO post = postService.findById(id);
-        
         return ResponseEntity.ok(post);
     }
 

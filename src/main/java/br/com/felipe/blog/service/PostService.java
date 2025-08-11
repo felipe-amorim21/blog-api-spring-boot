@@ -30,6 +30,16 @@ public class PostService {
         return postMapper.toResponseDTO(savedPost);
     }
 
+    public PostResponseDTO update (Long id, PostRequestDTO postRequestDTO){
+        Post existingPost = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
+
+        existingPost.setTitle(postRequestDTO.getTitle());
+        existingPost.setContent(postRequestDTO.getContent());
+        Post updatedPost = postRepository.save(existingPost);
+        return postMapper.toResponseDTO(updatedPost);
+    }
+
     public PostResponseDTO findById(Long id){
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
         return postMapper.toResponseDTO(post);
