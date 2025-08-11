@@ -23,6 +23,7 @@ public class PostMapper {
         return new PostResponseDTO(
                 post.getId(),
                 post.getTitle(),
+                post.getContent(),
                 post.getCreatedAt(),
                 post.getUpdatedAt(),
                 comments
