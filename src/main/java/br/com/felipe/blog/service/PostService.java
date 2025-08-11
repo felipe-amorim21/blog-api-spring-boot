@@ -7,6 +7,7 @@ import br.com.felipe.blog.exceptions.ResourceNotFoundException;
 import br.com.felipe.blog.mapper.PostMapper;
 import br.com.felipe.blog.repository.PostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class PostService {
         this.postMapper = postMapper;
     }
 
+    @Transactional
     public PostResponseDTO save (PostRequestDTO postDTO){
         Post post = postMapper.toEntity(postDTO);
         Post savedPost = postRepository.save(post);
@@ -40,6 +42,7 @@ public class PostService {
                 .toList();
     }
 
+    @Transactional
     public void deleteById(Long id){
         if(!postRepository.existsById(id)){
             throw new ResourceNotFoundException("Post de id " + id + " não encontrado");
