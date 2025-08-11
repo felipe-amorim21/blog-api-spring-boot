@@ -2,13 +2,12 @@ package br.com.felipe.blog.controller;
 
 import br.com.felipe.blog.dto.PostRequestDTO;
 import br.com.felipe.blog.dto.PostResponseDTO;
-import br.com.felipe.blog.entity.Post;
-import br.com.felipe.blog.exceptions.ResourceNotFoundException;
 import br.com.felipe.blog.service.PostService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,12 +24,19 @@ public class PostController {
     public ResponseEntity<PostResponseDTO> save(@RequestBody PostRequestDTO postRequestDTO) {
         PostResponseDTO createdPost = postService.save(postRequestDTO);
 
-        return ResponseEntity.ok(createdPost);
+         URI postUri = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(createdPost.getId())
+                        .toUri();
+
+        return ResponseEntity.created(postUri).body(createdPost);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findPostById(@PathVariable Long id) {
+    public ResponseEntity<PostResponseDTO> findPostById(@PathVariable Long id) {
         PostResponseDTO post = postService.findById(id);
+        
         return ResponseEntity.ok(post);
     }
 
@@ -42,7 +48,8 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable Long id) {
         postService.deleteById(id);
-        return ResponseEntity.ok().build();
+        
+        return ResponseEntity.noContent().build();
     }
 
 
