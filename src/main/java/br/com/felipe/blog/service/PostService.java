@@ -24,18 +24,29 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponseDTO save (PostRequestDTO postDTO){
+    public PostResponseDTO save(PostRequestDTO postDTO){
         Post post = postMapper.toEntity(postDTO);
         Post savedPost = postRepository.save(post);
         return postMapper.toResponseDTO(savedPost);
     }
 
-    public PostResponseDTO update (Long id, PostRequestDTO postRequestDTO){
+    public PostResponseDTO update(Long id, PostRequestDTO postRequestDTO){
         Post existingPost = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
 
         existingPost.setTitle(postRequestDTO.getTitle());
         existingPost.setContent(postRequestDTO.getContent());
+        Post updatedPost = postRepository.save(existingPost);
+        return postMapper.toResponseDTO(updatedPost);
+    }
+
+    public PostResponseDTO patch(Long id, PostRequestDTO postRequestDTO){
+        Post existingPost = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post de id " + id + " não encontrado"));
+
+        if (postRequestDTO.getTitle() != null) existingPost.setTitle(postRequestDTO.getTitle());
+        if (postRequestDTO.getContent() != null) existingPost.setContent(postRequestDTO.getContent());
+
         Post updatedPost = postRepository.save(existingPost);
         return postMapper.toResponseDTO(updatedPost);
     }

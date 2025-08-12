@@ -24,7 +24,7 @@ public class PostController {
     public ResponseEntity<PostResponseDTO> save(@RequestBody PostRequestDTO postRequestDTO) {
         PostResponseDTO createdPost = postService.save(postRequestDTO);
 
-         URI postUri = ServletUriComponentsBuilder
+        URI postUri = ServletUriComponentsBuilder
                         .fromCurrentRequest()
                         .path("/{id}")
                         .buildAndExpand(createdPost.getId())
@@ -34,8 +34,14 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponseDTO> update(@PathVariable Long id, @RequestBody PostRequestDTO postRequestDTO){
+    public ResponseEntity<PostResponseDTO> update(@PathVariable Long id, @RequestBody PostRequestDTO postRequestDTO) {
         PostResponseDTO updatedPost = postService.update(id, postRequestDTO);
+        return ResponseEntity.ok(updatedPost);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<PostResponseDTO> patch(@PathVariable Long id, @RequestBody PostRequestDTO postRequestDTO) {
+        PostResponseDTO updatedPost = postService.patch(id, postRequestDTO);
         return ResponseEntity.ok(updatedPost);
     }
 
@@ -53,9 +59,8 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable Long id) {
         postService.deleteById(id);
-        
+
         return ResponseEntity.noContent().build();
     }
-
 
 }
