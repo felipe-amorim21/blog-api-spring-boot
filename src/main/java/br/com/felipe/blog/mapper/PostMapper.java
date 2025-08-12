@@ -16,6 +16,7 @@ public class PostMapper {
                 .map(comment -> new CommentResponseDTO(
                         comment.getId(),
                         comment.getContent(),
+                        comment.getPost().getId(),
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
                 )).toList();
