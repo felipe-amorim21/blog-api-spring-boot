@@ -2,7 +2,6 @@ package br.com.felipe.blog.controller;
 
 import br.com.felipe.blog.dto.PostRequestDTO;
 import br.com.felipe.blog.dto.PostResponseDTO;
-import br.com.felipe.blog.entity.Post;
 import br.com.felipe.blog.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
