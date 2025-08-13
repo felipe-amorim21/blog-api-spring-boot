@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 "Recurso não encontrado",
                 e.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorResponse>(body, HttpStatus.NOT_FOUND);
 
     }
 
