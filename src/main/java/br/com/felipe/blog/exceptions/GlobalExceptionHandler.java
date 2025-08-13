@@ -6,33 +6,33 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.com.felipe.blog.exceptions.record.ErrorResponse;
+
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException e){
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.NOT_FOUND.value());
-        body.put("error", "Recurso não encontrado");
-        body.put("message", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException e) {
+        ErrorResponse body = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado",
+                e.getMessage());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleGenericException(Exception e){
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        body.put("error", "Erro interno do servidor");
-        body.put("message", "Ocorreu um erro inesperado");
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception e) {
+        ErrorResponse body = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Erro interno do servidor",
+                "Ocorreu um erro inesperado");
+        return new ResponseEntity<ErrorResponse>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 }
